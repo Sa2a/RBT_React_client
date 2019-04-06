@@ -1,30 +1,36 @@
 import axios from 'axios';
 
 const initial = {
-    Users: []
-};
-const rootReduce = (state = initial, action) => {
-    if (action.type === 'addUser') {
-        axios({
-            url: '/users/addUser',
-            method: 'post',
-            data: {
-                user: action.user
-            }
-        }).then((res) => {
-            if (res.status == 200) {
-                console.log(action.user);
-                return {
-                    ...state,
-                    Users: [...state.Users, action.user]
-                }
-            }
-            else{
-                console.log('nothing');
-
-            }
-        }).catch(error => console.log(error));
+    login: {
+        state: false,
+        user: null
     }
+};
+
+/////////////////////////////////////////////////////////////////////////////////////
+const rootReduce = (state = initial, action) => {
+    switch (action.type) {
+        case "LOGIN": {
+            return {
+                ...state,
+                login: {
+                    state: true,
+                    user: action.user
+                }
+            };
+        }
+        case "LOGOUT": {
+            return {
+                ...state,
+                login: {
+                    state: false,
+                    user: null
+                }
+            };
+        }
+    }
+
+
     return state;
 };
 export default rootReduce;

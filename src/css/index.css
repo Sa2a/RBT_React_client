@@ -13,10 +13,27 @@ code {
     monospace;
 }
 
-.header {
-    height: 600px;
-    width: auto;
-    background-size: cover;
+#root{
+    /*
+    background-color: #d8e0f0;
+    */
+    /*
     background-image: url('../photos/newBus.png');
-    align-content: center;
+    */
+}
+.body{
+    background-image: url('../photos/newBus.png');
+
+}
+.homeDives{
+    height:400px;
+    width: auto;
+}
+
+.carImage{
+    position: absolute;
+    z-index: -1;
+    height: fit-content;
+    width: 100%;
+
 }

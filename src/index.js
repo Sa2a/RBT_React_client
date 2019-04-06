@@ -3,16 +3,22 @@ import ReactDOM from 'react-dom';
 import './css/index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './javascript/serviceWorker';
-import {createStore} from 'redux';
+import {createStore,combineReducers } from 'redux';
 import {Provider} from 'react-redux';
-import rootReduce from "./reducer/RootReducer";
-import UsersPage from "./reactcomponents/users/UsersPage";
-import Header from "./Header";
+import rootReducer from "./reducer/RootReducer";
+import usersReducer from "./reducer/UsersReaducer";
 
-const store = createStore(rootReduce);
-ReactDOM.render(<Provider store={store}><Header/></Provider>, document.getElementById('header'));
+import App from "./App";
 
-ReactDOM.render(<Provider store={store}><UsersPage/></Provider>, document.getElementById('root'));
+const store = createStore(combineReducers({
+    rootReducer,
+    usersReducer
+}));
+store.dispatch({
+    type: 'toggleLogin',
+});
+console.log(store.getState())
+ReactDOM.render(<Provider store={store}><App/></Provider>, document.getElementById('root'));
 
 /*
 ReactDOM.render(<Provider store={store}><App/></Provider>, document.getElementById('root'));
