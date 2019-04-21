@@ -20,7 +20,7 @@ class Home extends Component {
                         <Media heading style={{color: "#FC361D", fontStyle: "bold", fontSize: 35}}>
                             ABOUTUS
                         </Media>
-                        <div style={{color:"#712d13",backgroundColor:"#c0a99d" ,fontSize:15,width:700}}>
+                        <div style={{color:"#712d13",backgroundColor:"#c0a99d" ,fontSize:18,width:700}}>
                         We Are a software engineering company that aims to develop a web and mobile<br/>
                         application to capture real time bus tracking using Global Positioning System(GPS)<br/>
                         in order to get user and vehicle position.<br/>

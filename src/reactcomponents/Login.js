@@ -2,8 +2,11 @@ import React, {Component} from 'react';
 import {Alert, Button, Col, Form, FormFeedback, FormGroup, FormText, Input, Label} from 'reactstrap';
 import {connect} from "react-redux";
 import axios from "axios";
+import { withCookies, Cookies } from 'react-cookie';
+import {instanceOf} from "prop-types";
 
 class Login extends Component {
+
     state = {
         email: null,
         password: null,
@@ -12,7 +15,8 @@ class Login extends Component {
     };
     onInputChange = (e) => {
         const {id, value} = e.target;
-        this.setState({[id]: value});
+        this.setState({[id]: value, userValidation: null});
+
     };
 
     handleSubmit = (e) => {
@@ -28,7 +32,8 @@ class Login extends Component {
             if (res.status == 200) {
                 if (res.data.user)
                     {
-                        this.props.login(res.data.user);
+                       /* this.props.login(res.data.user);*/
+                        this.props.cookies.set('user',res.data.user);
                         this.props.history.push('/home');
                     }
                 else {
@@ -88,7 +93,7 @@ class Login extends Component {
         );
     }
 }
-
+/*
 const mapStateToProps = (state) => {
     return {
     }
@@ -99,5 +104,5 @@ const mapActionsToProps = (dispatch) => {
             dispatch({type: 'LOGIN',user});
         }
     }
-};
-export default connect(mapStateToProps, mapActionsToProps)(Login);
+};*/
+export default withCookies(Login);

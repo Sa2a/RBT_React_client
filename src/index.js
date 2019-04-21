@@ -7,17 +7,19 @@ import {createStore,combineReducers } from 'redux';
 import {Provider} from 'react-redux';
 import rootReducer from "./reducer/RootReducer";
 import usersReducer from "./reducer/UsersReaducer";
+import setRoutes from "./reducer/SetRoutes";
 
 import App from "./App";
 
 const store = createStore(combineReducers({
     rootReducer,
-    usersReducer
+    usersReducer,
+    setRoutes
 }));
 store.dispatch({
     type: 'toggleLogin',
 });
-console.log(store.getState())
+console.log(store.getState());
 ReactDOM.render(<Provider store={store}><App/></Provider>, document.getElementById('root'));
 
 /*

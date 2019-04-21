@@ -2,18 +2,26 @@ import React, {Component} from "react";
 //import {GoogleMap, Marker, withGoogleMap, withScriptjs} from "react-google-maps"
 //import * as google from "google";
 import {GoogleApiWrapper, InfoWindow, Map, Marker} from "google-maps-react";
-import * as google from "google";
+import {connect} from "react-redux";
+import axios from "axios";
+
 
 export class MyMap extends Component {
     constructor(props) {
         super(props);
         this.onMarkerClick = this.onMarkerClick.bind(this);
+     /*   const google = window.google;
+        console.log(google);*/
         this.state = {
             showingInfoWindow: false,
             activeMarker: {},
             selectedPlace: {},
             pickUpPoints: [],
-            markers: null
+            /*markers: null,*/
+            geocoder: null,
+            infowindow: null,
+            directionsService: null,
+            directionsDisplay : null
         };
 
     }
@@ -24,18 +32,81 @@ export class MyMap extends Component {
             activeMarker: marker,
             showingInfoWindow: true
         });
+        let parameters = 'path=';
+        this.state.pickUpPoints.map(point => {
+            parameters += point.latLng.lat + ',' + point.latLng.lng + '|';
+        });
+        parameters = parameters.substring(0, parameters.length - 1);
+        axios({
+            url: `https://roads.googleapis.com/v1/snapToRoads?${parameters}&key=${this.props.apiKey}`,
+            method: 'get'
+        }).then((res) => {
+            console.log(res);
+            console.log(res.data);
+
+        }).catch(error => console.log(error.response));
+    };
+    displayRoute = (origin, destination, service, display)=>{
+        service.route({
+            origin: origin,
+            destination: destination,
+            waypoints: [{location: 'Barrier Hwy, Little Topar NSW 2880, Australia'}],
+            travelMode: 'DRIVING',
+            avoidTolls: true
+        }, function(response, status) {
+            if (status === 'OK') {
+                display.setDirections(response);
+                console.log(response);
+            } else {
+                alert('Could not display directions due to: ' + status);
+            }
+        });
     };
     mapClicked = (mapProps, map, clickEvent) => {
+        this.displayRoute('Barrier Hwy, Broken Hill NSW 2880, Australia',
+            'Barrier Hwy, Little Topar NSW 2880, Australia', this.state.directionsService,
+            this.state.directionsDisplay);
         // ...
-        console.log(map);
+        /*console.log(map);
         console.log(clickEvent);
         let newPoints = Object.assign([], this.state.pickUpPoints);
-        newPoints.push({latLng: clickEvent.latLng});
+        let latlng = {lat: clickEvent.latLng.lat(), lng: clickEvent.latLng.lng()};
+        newPoints.push({latLng: latlng});
         this.setState({pickUpPoints: newPoints});
-     /*   let geocoder = new google.maps.Geocoder;
-        console.log(geocoder);*/
+*/
+
+        /* this.state.geocoder.geocode({'location': latlng},(results, status)=> {
+             if (status === 'OK') {
+                 if (results[0]) {
+                     map.setZoom(11);
+                     let marker = this.props.google.maps.Marker({
+                         position: latlng,
+                         map: map,
+                         name:results[0].formatted_address
+                     });
+                     this.state.infowindow.setContent(results[0].formatted_address);
+                     this.state.infowindow.open(map, marker);
+                 } else {
+                     window.alert('No results found');
+                 }
+             } else {
+                 window.alert('Geocoder failed due to: ' + status);
+             }
+         });*/
     };
 
+    initMap = (mapProps, map)=>{
+        const {google} = mapProps;
+        this.setState({
+            geocoder: new google.maps.Geocoder(),
+            infowindow: new google.maps.InfoWindow,
+            directionsService: new google.maps.DirectionsService,
+            directionsDisplay : new google.maps.DirectionsRenderer({
+                draggable: true,
+                map: map
+            })
+        });
+    };
     render() {
         /* let bounds = new this.props.google.maps.LatLngBounds();
        for (let i = 0; i < this.state.points.length; i++) {
@@ -50,7 +121,6 @@ export class MyMap extends Component {
                     position={point.latLng}/>
             );
         });
-
         if (!this.props.google) {
             return <div>Loading...</div>;
         }
@@ -58,12 +128,15 @@ export class MyMap extends Component {
         return (
 
             <Map google={this.props.google}
-                 style={{width: '100%', height: '100%', position: 'relative'}}
+                 style={{height: '100%', width: '100%', position: 'relative'}}
                  className={'map'}
                  zoom={14}
                  onClick={this.mapClicked}
+                 onReady={this.initMap}
             >
+
                 {markers}
+
                 {/*<Marker color={'white'}
                     title={'The marker`s title will appear as a tooltip.'}
                     name={'SOMA'}
@@ -113,10 +186,15 @@ export class MyMap extends Component {
     }
 }
 
-export default GoogleApiWrapper({
-    apiKey: "AIzaSyB_eohRvcHqlhhPU7COoebF_gaKFSpXKcs",
+const mapStateToProps = (state) => {
+    return {
+        apiKey: state.rootReducer.apiKey
+    }
+};
+export default connect(mapStateToProps)(GoogleApiWrapper({
+    apiKey: 'AIzaSyB_eohRvcHqlhhPU7COoebF_gaKFSpXKcs',
     v: "3"
-})(MyMap);
+})(MyMap));
 
 /*
 const MyMapComponent =  withScriptjs(withGoogleMap((props) => {

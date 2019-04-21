@@ -1,15 +1,27 @@
 import React, {Component} from 'react';
-import {Button, Collapse, Media, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem} from 'reactstrap';
 import logo from "../photos/icons/logo.svg";
-import {connect} from "react-redux";
 import ButtonDropDown from "./reusecomponents/ButtonDropDown";
 import {Link} from "react-router-dom";
+import {withCookies} from 'react-cookie';
+import {
+    Button,
+    Collapse,
+    Media,
+    Nav,
+    Container,
+    Row,
+    Navbar,
+    Alert,
+    NavbarBrand,
+    NavbarToggler,
+    Col,
+    NavItem
+} from 'reactstrap';
 
 
 class Header extends Component {
     constructor(props) {
         super(props);
-
         this.toggle = this.toggle.bind(this);
         this.state = {
             isOpen: false,
@@ -57,6 +69,7 @@ class Header extends Component {
                     </NavbarBrand>
                     <NavbarToggler onClick={this.toggle}/>
                     <Collapse isOpen={this.state.isOpen} navbar>
+
                         {this.getNav()}
                     </Collapse>
                 </Navbar>
@@ -67,52 +80,67 @@ class Header extends Component {
     }
 
     getNav() {
-        console.log(this.props.loggedIn);
-        if (this.props.loggedIn) {
+        if (this.props.allCookies.user) {
             return (
-                <Nav className="ml-auto" navbar>
-                    <NavItem>
-                        <Link to="/home">
-                            <Button color='primary' to="home">Home</Button>
-                        </Link>
-                    </NavItem>
+                <Container className={'sticky'}>
+                    <Row className="float-right" >
+                        <Col xs="auto" className="float-right">
+                        <Alert
+                            color='success'>{this.props.allCookies.user.firstName + ' ' + this.props.allCookies.user.lastName} </Alert>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Nav className="ml-auto" style={{paddingTop: 50}} navbar>
 
-                    <NavItem>
-                        <ButtonDropDown text={{name: "Track", ref: "track"}} items={[
-                            {name: "Track", ref: "track"},
-                            {name: "Another Action", ref: "track2"},
-                            {name: "Another Action", ref: "track3"}
-                        ]}/>
-                    </NavItem>
-                    <NavItem>
-                        <ButtonDropDown text={{name: "Routes", ref: "routes"}} items={[
-                            {name: "Routes", ref: "routes"},
-                            {name: "Another Action", ref: "Routes2"},
-                            {name: "Another Action", ref: "Routes3"}
-                        ]}/>
-                    </NavItem>
-                    <NavItem>
+                            <NavItem>
+                                <Link to="/home">
+                                    <Button color='primary' to="home">Home</Button>
+                                </Link>
+                            </NavItem>
+                            {' '}
+                            <NavItem>
+                                <ButtonDropDown text={{name: "Track", ref: "track"}} items={[
+                                    {name: "Track", ref: "track"},
+                                    {name: "Another Action", ref: "track2"},
+                                    {name: "Another Action", ref: "track3"}
+                                ]}/>
+                            </NavItem>
+                            {' '}
+                            <NavItem>
+                                <ButtonDropDown text={{name: "Routes", ref: "/routes"}} items={[
+                                    {name: "Routes", ref: "/routes"},
+                                    {name: "Another Action", ref: "Routes2"},
+                                    {name: "Another Action", ref: "Routes3"}
+                                ]}/>
+                            </NavItem>
+                            <NavItem>
 
-                        <ButtonDropDown text={{name: "Users", ref: "/users"}} items={[
-                            {name: "Add Users", ref: "/users/addUsers"},
-                            {name: "Parents", ref: "/users/parents"},
-                            {name: "Supervisors", ref: "/users/supervisors"},
-                            {name: "Drivers", ref: "/users/drivers"},
-                            {name: "Admins", ref: "/users/admins"}
-                        ]}/>
+                                <ButtonDropDown text={{name: "Users", ref: "/users"}} items={[
+                                    {name: "Add Users", ref: "/users/addUsers"},
+                                    {name: "Parents", ref: "/users/parents"},
+                                    {name: "Supervisors", ref: "/users/supervisors"},
+                                    {name: "Drivers", ref: "/users/drivers"},
+                                    {name: "Admins", ref: "/users/admins"}
+                                ]}/>
 
-                    </NavItem>
-                    <NavItem>
-                        <Link to="/contactus">
-                            <Button color='primary' >Contact US</Button>
-                        </Link>
-                    </NavItem>
-                    <NavItem>
-                        <Link to="/home">
-                            <Button onClick={this.props.logout}>Logout</Button>
-                        </Link>
-                    </NavItem>
-                </Nav>);
+                            </NavItem>
+                            {' '}
+                            <NavItem>
+                                <Link to="/contactus">
+                                    <Button color='primary'>Contact US</Button>
+                                </Link>
+                            </NavItem>
+                            {' '}
+                            <NavItem>
+                                <Link to="/home">
+                                    <Button onClick={() => {
+                                        this.props.cookies.remove('user');
+                                    }}>Logout</Button>
+                                </Link>
+                            </NavItem>
+                        </Nav>
+                    </Row>
+                </Container>);
         } else {
             return (<Nav className="ml-auto" navbar>
                 <NavItem>
@@ -147,7 +175,7 @@ class Header extends Component {
 
 }
 
-const mapStateToProps = (state) => {
+/*const mapStateToProps = (state) => {
      return {
      }
 };
@@ -157,5 +185,5 @@ const mapActionsToProps = (dispatch) => {
             dispatch({type: 'LOGOUT'})
         }
     }
-};
-export default connect(mapStateToProps, mapActionsToProps)(Header);
+};*/
+export default withCookies(Header);

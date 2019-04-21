@@ -6,39 +6,48 @@ import Login from "./reactcomponents/Login";
 import Header from "./reactcomponents/Header";
 import Footer from "./reactcomponents/Footer";
 import {connect} from "react-redux";
+import {CookiesProvider} from 'react-cookie';
+import RoutesPage from "./reactcomponents/routes/RoutesPage";
 
 class App extends Component {
 
     render() {
         return (
-            <Router>
-                <Route path="/" component={() => <Header loggedIn={this.props.loggedIn}/>}/>
-
-                {/*
+            <CookiesProvider>
+                <Router>
+                    <Header/>
+                    {/*
                 <Image className="carImage" src={bussImage} style={{width:"auto"}}/>
 */}
-                <div className="body">
-                    <Route path="/home" component={Home}/>
-                    <Route path="/login" component={Login}/>
+                    <div className="body">
+                        <Route exact path="/" component={Home}/>
+                        <Route path="/home" component={Home}/>
+                        <Route path="/login" component={Login}/>
 
 
-                    <Route exact path="/users" component={() => <UsersPage tabId="addUser"/>}/>
-                    <Route exact path="/users/addUsers" component={() => <UsersPage tabId="addUser"/>}/>
-                    <Route exact path="/users/parents" component={() => <UsersPage tabId="parents"/>}/>
-                    <Route exact path="/users/supervisors" component={() => <UsersPage tabId="supervisors"/>}/>
-                    <Route exact path="/users/drivers" component={() => <UsersPage tabId="drivers"/>}/>
-                    <Route exact path="/users/admins" component={() => <UsersPage tabId="admins"/>}/>
-                </div>
-                <Footer/>
-            </Router>
+                        <Route exact path="/users" component={() => <UsersPage tabId="addUser"/>}/>
+                        <Route  path="/users/addUsers" component={() => <UsersPage tabId="addUser"/>}/>
+                        <Route  path="/users/parents" component={() => <UsersPage tabId="parents"/>}/>
+                        <Route  path="/users/supervisors" component={() => <UsersPage tabId="supervisors"/>}/>
+                        <Route  path="/users/drivers" component={() => <UsersPage tabId="drivers"/>}/>
+                        <Route  path="/users/admins" component={() => <UsersPage tabId="admins"/>}/>
+
+
+                        <Route exact path="/routes" component={() => <RoutesPage tabId='setRoutes'/>}/>
+
+                    </div>
+                    <Footer/>
+                </Router>
+            </CookiesProvider>
         );
     }
 }
+/*
 const mapStateToProps = (state) => {
 
     return {
         loggedIn: state.rootReducer.login.state,
 
     }
-};
-export default connect(mapStateToProps)(App);
+};*/
+export default (App);

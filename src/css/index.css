@@ -22,6 +22,7 @@ code {
     */
 }
 .body{
+    min-height: 700px;
     background-image: url('../photos/newBus.png');
 
 }
@@ -36,4 +37,7 @@ code {
     height: fit-content;
     width: 100%;
 
+}
+.sticky{
+    position: sticky;
 }
