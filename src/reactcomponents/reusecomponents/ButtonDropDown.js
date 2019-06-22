@@ -19,19 +19,22 @@ export default class ButtonDropDown extends React.Component {
     }
 
     render() {
-        let items = this.props.items.map(item=>{
-            return(
+        let items = this.props.items ? this.props.items.map(item => {
+            return (
                 <Link to={item.ref}>
-                <DropdownItem >{item.name}</DropdownItem>
+                    <DropdownItem>{item.name}</DropdownItem>
                 </Link>
             );
-        });
+        }) : null;
         return (
             <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                 <Link to={this.props.text.ref}>
-                <Button id="caret" color="primary" >{this.props.text.name}</Button>
+                    <Button id="caret" color="primary">{this.props.text.name}</Button>
                 </Link>
-                <DropdownToggle caret color="primary" />
+                {
+                    items ? <DropdownToggle caret color="primary"/> :
+                        null
+                }
                 <DropdownMenu>
                     {items}
                 </DropdownMenu>

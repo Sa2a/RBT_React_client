@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {Alert, Button, Col, Form, FormFeedback, FormGroup, FormText, Input, Label} from 'reactstrap';
-import {connect} from "react-redux";
 import axios from "axios";
-import { withCookies, Cookies } from 'react-cookie';
-import {instanceOf} from "prop-types";
+import {withCookies, Cookies} from 'react-cookie';
 
 class Login extends Component {
 
@@ -29,22 +27,18 @@ class Login extends Component {
                 password: this.state.password
             }
         }).then((res) => {
-            if (res.status == 200) {
-                if (res.data.user)
-                    {
-                       /* this.props.login(res.data.user);*/
-                        this.props.cookies.set('user',res.data.user);
-                        this.props.history.push('/home');
-                    }
-                else {
-                    this.setState({
-                        userValidation:
-                            <Alert color="danger" style={{width: 500}}> "invalid e-mail or password!"</Alert>
-                    });
-                }
+            if (res.data.user) {
+                /* this.props.login(res.data.user);*/
+                this.props.cookies.set('user', res.data.user);
+                this.props.history.push('/home');
+                window.location.reload();
             } else {
-                console.log("error");
+                this.setState({
+                    userValidation:
+                        <Alert color="danger" style={{width: 500,color:'black', fontStyle:'bold'}}>invalid e-mail or password!</Alert>
+                });
             }
+
         }).catch(error => {
             console.log(error)
         });
@@ -59,7 +53,6 @@ class Login extends Component {
                 <Form style={{paddingTop: 50, paddingLeft: 100, border: "#7071ed", align: "right"}}
                       onSubmit={this.handleSubmit}>
                     <h2>Sign In</h2>
-                    {this.state.userValidation}
                     <FormGroup>
                         <Col sm={2}>
                             <Label for="email">Email</Label>
@@ -82,27 +75,16 @@ class Login extends Component {
                                    title="minimum 5 characters, and maximum 32" onChange={this.onInputChange} required/>
                         </Col>
                     </FormGroup>
-                    <Col style={{}}>
-                        <Button size="md" color="success">Login</Button>
-                    </Col>
-                </Form>
-                <FormFeedback invalid>
+                    <FormGroup>
+                        <Col style={{}}>
+                            <Button size="md" color="success">Login</Button>
+                        </Col>
+                    </FormGroup>
                     {this.state.userValidation}
-                </FormFeedback>
+                </Form>
             </div>
         );
     }
 }
-/*
-const mapStateToProps = (state) => {
-    return {
-    }
-};
-const mapActionsToProps = (dispatch) => {
-    return {
-        login: (user) => {
-            dispatch({type: 'LOGIN',user});
-        }
-    }
-};*/
+
 export default withCookies(Login);

@@ -1,27 +1,10 @@
 import React, {Component} from 'react';
-import AddUser from "./AddUser";
-import DisplayUsers from "./DisplayUsers";
+import DisplayAdminsOrParents from "./display/DisplayAdminsOrParents";
 import {Container, Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap';
 import classnames from 'classnames';
-import {connect} from "react-redux";
+import DisplaySupervisorsOrDrivers from "./display/DisplaySupervisorsOrDrivers";
+import DisplayStudents from "./display/DisplayStudents";
 
-//parents,supervisors,drivers,admins
-/*
-    <TabPane tabId="addUser">
-                        <AddUser/>
-                    </TabPane>
-                    <TabPane tabId="parents">
-                        <DisplayUsers/>
-                    </TabPane>
-                    <TabPane tabId="supervisors">
-                        <DisplayUsers/>
-                    </TabPane>
-                    <TabPane tabId="drivers">
-                        <DisplayUsers/>
-                    </TabPane>
-                    <TabPane tabId="admins">
-                        <DisplayUsers/>
- */
 class UsersPage extends Component {
     constructor(props) {
         super(props);
@@ -47,73 +30,77 @@ class UsersPage extends Component {
                     paddingTop: 20, paddingLeft: 20, padBottom: 15,
                     color: "#fbfbff"
                 }}>
-                    <NavItem outline>
-                        <NavLink outline style={{backgroundColor: '#007bff'}}
-                                 className={classnames({active: this.state.activeTab === 'addUser'})}
+                    <NavItem>
+                        <NavLink style={{color:'white', backgroundColor: this.state.activeTab === 'admin'?"#5858c1":'#007bff'}}
+                                 className={classnames({active: this.state.activeTab === 'admin'})}
                                  onClick={() => {
-                                     this.toggle('addUser');
+                                     this.toggle('admin');
                                  }}
                         >
-                            Add Users
+                            Admins
                         </NavLink>
                     </NavItem>
+
                     <NavItem>
-                        <NavLink style={{backgroundColor: '#007bff'}}
-                                 className={classnames({active: this.state.activeTab === 'parents'})}
+                        <NavLink style={{color:'white', backgroundColor:  this.state.activeTab === 'supervisor'?"#5858c1":'#007bff'}}
+                                 className={classnames({active: this.state.activeTab === 'supervisor'})}
                                  onClick={() => {
-                                     this.toggle('parents');
-                                 }}>
-                            Parents
-                        </NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink style={{backgroundColor: '#007bff'}}
-                                 className={classnames({active: this.state.activeTab === 'supervisors'})}
-                                 onClick={() => {
-                                     this.toggle('supervisors');
+                                     this.toggle('supervisor');
                                  }}
                         >
                             Supervisors
                         </NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink style={{backgroundColor: '#007bff'}}
-                                 className={classnames({active: this.state.activeTab === 'drivers'})}
+                        <NavLink style={{color:'white', backgroundColor:  this.state.activeTab === 'driver'?"#5858c1":'#007bff'}}
+                                 className={classnames({active: this.state.activeTab === 'driver'})}
                                  onClick={() => {
-                                     this.toggle('drivers');
+                                     this.toggle('driver');
                                  }}
                         >
                             Drivers
                         </NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink style={{backgroundColor: '#007bff'}}
-                                 className={classnames({active: this.state.activeTab === 'admins'})}
+                        <NavLink style={{color:'white', backgroundColor: this.state.activeTab === 'parent'?"#5858c1":'#007bff'}}
+                                 className={classnames({active: this.state.activeTab === 'parent'})}
                                  onClick={() => {
-                                     this.toggle('admins');
-                                 }}
-                        >
-                            Admins
+                                     this.toggle('parent');
+                                 }}>
+                            Parents
                         </NavLink>
                     </NavItem>
+                    <NavItem>
+                        <NavLink style={{color:'white', backgroundColor: this.state.activeTab === 'student'?"#5858c1":'#007bff'}}
+                                 className={classnames({active: this.state.activeTab === 'student'})}
+                                 onClick={() => {
+                                     this.toggle('student');
+                                 }}>
+                            Students
+                        </NavLink>
+                    </NavItem>
+
                 </Nav>
                 <TabContent activeTab={this.state.activeTab} style={{backgroundColor: "#5858c1", paddingTop: 20}}>
-                    {this.state.search}
 
-                    <TabPane tabId="addUser">
+
+                    {/*<TabPane tabId="addUser">
                         <AddUser/>
+                    </TabPane>*/}
+                    <TabPane tabId="admin">
+                        <DisplayAdminsOrParents tabId="admin"/>
                     </TabPane>
-                    <TabPane tabId="parents">
-                        <DisplayUsers tabId={'parents'}/>
+                    <TabPane tabId="supervisor">
+                        <DisplaySupervisorsOrDrivers tabId="supervisor"/>
                     </TabPane>
-                    <TabPane tabId="supervisors">
-                        <DisplayUsers  tabId="supervisors"/>
+                    <TabPane tabId="driver">
+                        <DisplaySupervisorsOrDrivers tabId="driver"/>
                     </TabPane>
-                    <TabPane tabId="drivers">
-                        <DisplayUsers tabId="drivers"/>
+                    <TabPane tabId="parent">
+                        <DisplayAdminsOrParents tabId={'parent'}/>
                     </TabPane>
-                    <TabPane tabId="admins">
-                        <DisplayUsers tabId="admins"/>
+                    <TabPane tabId="student">
+                        <DisplayStudents/>
                     </TabPane>
 
                 </TabContent>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import logo from "../photos/icons/logo.svg";
+import logo from "../photos/icons/logo.jpg";
 import ButtonDropDown from "./reusecomponents/ButtonDropDown";
 import {Link} from "react-router-dom";
 import {withCookies} from 'react-cookie';
@@ -53,19 +53,16 @@ class Header extends Component {
                 <Navbar light expand="md" style={{paddingTop: 20}}>
 
                     <NavbarBrand>
-                        <Media>
                             <Link to="/home">
-
+                                <Media left style={{paddingLeft: 80}}>
+                                    <Media object src={logo} alt="Generic placeholder image"/>
+                                </Media>
                                 <Media body>
-                                    <Media heading>
-                                        <Media style={{paddingLeft: 80}}>
-                                            <Media object src={logo} alt="Generic placeholder image"/>
-                                        </Media>
+                                    <Media heading style={{color:'white'}} >
                                         RBT RealTimeTracking
                                     </Media>
                                 </Media>
                             </Link>
-                        </Media>
                     </NavbarBrand>
                     <NavbarToggler onClick={this.toggle}/>
                     <Collapse isOpen={this.state.isOpen} navbar>
@@ -91,44 +88,34 @@ class Header extends Component {
                     </Row>
                     <Row>
                         <Nav className="ml-auto" style={{paddingTop: 50}} navbar>
-
-                            <NavItem>
-                                <Link to="/home">
-                                    <Button color='primary' to="home">Home</Button>
-                                </Link>
-                            </NavItem>
                             {' '}
                             <NavItem>
-                                <ButtonDropDown text={{name: "Track", ref: "track"}} items={[
-                                    {name: "Track", ref: "track"},
-                                    {name: "Another Action", ref: "track2"},
-                                    {name: "Another Action", ref: "track3"}
-                                ]}/>
+                                <ButtonDropDown text={{name: "Track", ref: "/track"}}/>
                             </NavItem>
                             {' '}
                             <NavItem>
                                 <ButtonDropDown text={{name: "Routes", ref: "/routes"}} items={[
-                                    {name: "Routes", ref: "/routes"},
-                                    {name: "Another Action", ref: "Routes2"},
-                                    {name: "Another Action", ref: "Routes3"}
+                                    {name: "Buses", ref: "/routes/buses"},
+                                    {name: "Set Route", ref: "/routes/setRoute"},
                                 ]}/>
                             </NavItem>
                             <NavItem>
 
                                 <ButtonDropDown text={{name: "Users", ref: "/users"}} items={[
-                                    {name: "Add Users", ref: "/users/addUsers"},
-                                    {name: "Parents", ref: "/users/parents"},
+                                    {name: "Admins", ref: "/users/admins"},
                                     {name: "Supervisors", ref: "/users/supervisors"},
                                     {name: "Drivers", ref: "/users/drivers"},
-                                    {name: "Admins", ref: "/users/admins"}
+                                    {name: "Parents", ref: "/users/parents"},
+                                    {name: "Students", ref: "/users/students"}
                                 ]}/>
 
                             </NavItem>
                             {' '}
                             <NavItem>
-                                <Link to="/contactus">
-                                    <Button color='primary'>Contact US</Button>
-                                </Link>
+                                <ButtonDropDown text={{name: "Reports", ref: "/reports"}} items={[
+                                    {name: "Parents", ref: "/reports/parents"},
+                                    {name: "Supervisors", ref: "/reports/supervisors"},
+                                ]}/>
                             </NavItem>
                             {' '}
                             <NavItem>
@@ -175,15 +162,5 @@ class Header extends Component {
 
 }
 
-/*const mapStateToProps = (state) => {
-     return {
-     }
-};
-const mapActionsToProps = (dispatch) => {
-    return {
-        logout: () => {
-            dispatch({type: 'LOGOUT'})
-        }
-    }
-};*/
+
 export default withCookies(Header);

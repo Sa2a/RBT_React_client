@@ -1,26 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './css/index.css';
+import './css/selectCSS.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import * as serviceWorker from './javascript/serviceWorker';
-import {createStore,combineReducers } from 'redux';
-import {Provider} from 'react-redux';
-import rootReducer from "./reducer/RootReducer";
-import usersReducer from "./reducer/UsersReaducer";
-import setRoutes from "./reducer/SetRoutes";
+import 'react-widgets/dist/css/react-widgets.css';
 
+import * as serviceWorker from './javascript/serviceWorker';
+
+import "react-datepicker/dist/react-datepicker.css";
+import 'react-splitter-layout/lib/index.css';
 import App from "./App";
 
-const store = createStore(combineReducers({
-    rootReducer,
-    usersReducer,
-    setRoutes
-}));
-store.dispatch({
-    type: 'toggleLogin',
-});
-console.log(store.getState());
-ReactDOM.render(<Provider store={store}><App/></Provider>, document.getElementById('root'));
+
+ReactDOM.render(<App/>, document.getElementById('root'));
 
 /*
 ReactDOM.render(<Provider store={store}><App/></Provider>, document.getElementById('root'));

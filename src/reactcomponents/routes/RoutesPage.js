@@ -1,22 +1,14 @@
 import React, {Component} from 'react';
 import {Container, Nav, NavItem, NavLink, TabContent, TabPane} from "reactstrap";
 import classnames from "classnames";
-import SetRoute from "./SetRoute";
+import DisplayBuses from "./bus/DisplayBuses";
+import SetPickUpPoints from "./map/AddRoute";
+
 export class RoutesPage extends Component {
-    /*render() {
-        return (
-            <MyMap
-                isMarkerShown
-                googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_eohRvcHqlhhPU7COoebF_gaKFSpXKcs&callback=initMap"
-                loadingElement={<div style={{ height: `100%` }} />}
-                containerElement={<div style={{ height: 700}} />}
-                mapElement={<div style={{ height: `100%` }} />}
-            />
-        );
-    }*/
     constructor(props) {
         super(props);
         this.toggle = this.toggle.bind(this);
+        this.childTask = React.createRef();
         this.state = {
             activeTab: this.props.tabId,
         };
@@ -39,7 +31,18 @@ export class RoutesPage extends Component {
                     color: "#fbfbff"
                 }}>
                     <NavItem outline>
-                        <NavLink outline style={{backgroundColor: '#007bff'}}
+                        <NavLink style={{color:'white', backgroundColor: this.state.activeTab === 'displayBuses'?"#5858c1":'#007bff'}}
+                                 className={classnames({active: this.state.activeTab === 'displayBuses'})}
+                                 onClick={() => {
+                                     this.toggle('displayBuses');
+                                 }}
+                        >
+                            Buses
+                        </NavLink>
+                    </NavItem>
+
+                    <NavItem outline>
+                        <NavLink style={{color:'white', backgroundColor: this.state.activeTab === 'setRoutes'?"#5858c1":'#007bff'}}
                                  className={classnames({active: this.state.activeTab === 'setRoutes'})}
                                  onClick={() => {
                                      this.toggle('setRoutes');
@@ -52,14 +55,18 @@ export class RoutesPage extends Component {
                 </Nav>
                 <TabContent activeTab={this.state.activeTab} style={{backgroundColor: "#5858c1", paddingTop: 20}}>
                     {this.state.search}
-
-                    <TabPane tabId="setRoutes">
-                        <SetRoute/>
+                    <TabPane tabId="displayBuses">
+                        <DisplayBuses/>
                     </TabPane>
+                    <TabPane tabId="setRoutes">
+                        <SetPickUpPoints ref={this.childTask}/>
+                    </TabPane>
+
                 </TabContent>
             </Container>
 
         );
     }
 }
+
 export default RoutesPage;

@@ -1,10 +1,20 @@
 import React, {Component} from 'react';
-import {Button, CardText, Col, Form, FormFeedback, FormGroup, FormText, Input, Label} from 'reactstrap';
-import Container from "reactstrap/es/Container";
+import {
+    Button,
+    Col,
+    Form,
+    Alert,
+    FormFeedback,
+    FormGroup,
+    FormText,
+    Input,
+    Label,
+    UncontrolledCollapse
+} from 'reactstrap';
 import {connect} from "react-redux";
-import SearchPlaces from "../routes/map/SearchPlaces";
 import axios from "axios";
-import PopUp from "../reusecomponents/PopUp";
+import DatePicker from "react-datepicker/es";
+import AddStudent from "./AddStudent";
 
 class AddUser extends Component {
 
@@ -17,14 +27,13 @@ class AddUser extends Component {
             contactNumber: null,
             nationalNumber: null,
             address: null,
-            DayOfBirth: null,
-            MonthOfBirth: null,
-            yearOfBirth: null,
-            userType: 'parent',
+            dateOfBirth: null,
+            userType: this.props.tabId,
+            students: [],
+            studentAlerts: []
         },
 
-        popUp: false,
-        text: null,
+        alert: null,
         validation: {
             submit: false,
             firstName: null,
@@ -32,6 +41,7 @@ class AddUser extends Component {
             email: null,
             contactNumber: null,
             nationalNumber: null,
+            address: null,
         }
     };
     onInputChange = (e) => {
@@ -45,7 +55,7 @@ class AddUser extends Component {
         }));
         let pattern;
         if (id === "firstName" || id === "lastName") {
-            pattern = /^[a-zA-Z]{1,15}$/;
+            pattern = /^\w{1,32}$/;
 
         } else if (id === "email") {
             pattern = /^.+@.+?\.[a-zA-Z]{2,3}$/;
@@ -53,6 +63,8 @@ class AddUser extends Component {
             pattern = /^01\d{9}$/;
         else if (id === "nationalNumber")
             pattern = /^\d{14}$/;
+        else if (id === "address")
+            pattern = /^.*[a-zA-Z]+.*$/;
 
         if (pattern != null && pattern.test(value)) {
             this.setState(state => ({
@@ -95,9 +107,9 @@ class AddUser extends Component {
                 }
             }));
     };
+
     onSubmit = (e) => {
         e.preventDefault();
-        /*this.props.addUser(this.state);*/
         axios({
             url: '/add_user',
             method: 'post',
@@ -105,44 +117,70 @@ class AddUser extends Component {
                 user: this.state.user
             }
         }).then((res) => {
-
-            if (res.data.status ===true) {
+            this.setState(state => ({
+                ...state,
+                user: {
+                    ...state.user,
+                    studentAlerts: [],
+                }
+            }));
+            if (res.data.status === true) {
                 let user = this.state.user;
-                this.setState({
-                    text:
-                        (
-                            <div>firstName: {user.firstName}<br/>
-                                lastName: {user.lastName}<br/>
-                                email: {user.email}<br/>
-                                password: {user.password}<br/>
-                                contactNumber: {user.contactNumber}<br/>
-                                nationalNumber: {user.nationalNumber}<br/>
-                                address: {user.address}<br/>
-                                Date of Birth: {user.DayOfBirth}/{user.MonthOfBirth}/{user.yearOfBirth}<br/>
-                                userType: {this.state.user.userType}<br/>
-                            </div>)
-                });
-            } else {
-                this.setState({
-                    text: res.data.status
-                });
+                this.props.addUserToTable(res.data.user, this.state.user.userType);
+                this.setState(state => ({
+                    ...state,
+                    alert: <Alert color={'success'}>{user.firstName} is added successfully.</Alert>,
+                    user: {
+                        ...state.user,
+                    }
+                }));
+            }else if (this.state.user){
+                let user = this.state.user;
+                this.props.addUserToTable(res.data.user, this.state.user.userType);
+                this.setState(state => ({
+                    ...state,
+                    alert: <Alert color={'danger'}>{res.data.status}</Alert>,
+                    user: {
+                        ...state.user,
+                    }
+                }));
             }
-            this.setState({popUp: true});
-
-            /*
-                        Users: [...state.Users, res.data.user]
-            */
+            else {
+                this.setState({alert: <Alert color={'danger'}>{res.data.status}</Alert>});
+            }
         }).catch(error => console.log(error));
     };
-    togglePopUP = () => {
-        this.setState({popUp: false});
+
+    birthDateChange = (Data) => {
+        this.setState(state => ({
+            ...state,
+            user: {
+                ...state.user,
+                dateOfBirth: Data
+            }
+        }));
     };
+    addStudentToParent = (student) => {
+        let newStud = Object.assign([], this.state.user.students);
+        newStud.push(student);
+        let newStudAlerts = Object.assign([], this.state.user.studentAlerts);
+        newStudAlerts.push(<Alert color={'success'}>{student.name} added to current parent.</Alert>);
+        this.setState(state => ({
+            ...state,
+            user: {
+                ...state.user,
+                students: newStud,
+                studentAlerts: newStudAlerts
+            }
+        }));
+    };
+
 
     render() {
         return (
-            <Container style={{color: "#ffffff"}}>
-                {this.state.popUp && <PopUp isOpen={true} okOnClick={this.togglePopUP} text={this.state.text}/>}
+            <div style={{color: "#ffffff"}}>
                 <Form onSubmit={this.onSubmit}>
+
                     <FormGroup row={true}>
                         <Col sm={2}>
                             <Label for="firstName">First Name</Label>
@@ -152,7 +190,7 @@ class AddUser extends Component {
                                    valid={this.state.validation.firstName}
                                    invalid={this.state.validation.firstName === false} required/>
                             <FormFeedback invalid style={{color: 'white', backgroundColor: '#dc3545'}}>
-                                required alphabet letters, maximum 15 letter!
+                                first name required 'no special characters allowed', maximum 32 letters!
                             </FormFeedback>
                         </Col>
 
@@ -166,7 +204,7 @@ class AddUser extends Component {
                                    valid={this.state.validation.lastName}
                                    invalid={this.state.validation.lastName === false} required/>
                             <FormFeedback invalid style={{color: 'white', backgroundColor: '#dc3545'}}>
-                                required alphabet letters, maximum 15 letter!
+                                last name required 'no special characters allowed', maximum 32 letters!
                             </FormFeedback>
                         </Col>
                     </FormGroup>
@@ -176,7 +214,8 @@ class AddUser extends Component {
                         </Col>
                         <Col sm={4}>
                             <Input id="email" type="email" size="sm" onChange={this.onInputChange}
-                                   valid={this.state.validation.email} invalid={this.state.validation.email === false}
+                                   valid={this.state.validation.email}
+                                   invalid={this.state.validation.email === false}
                                    required/>
                             <FormFeedback invalid style={{color: 'white', backgroundColor: '#dc3545'}}>
                                 invalid email!
@@ -191,7 +230,8 @@ class AddUser extends Component {
                         </Col>
                         <Col sm={4}>
                             <Input id="password" type="password" size="sm" pattern=".{5,32}"
-                                   title="minimum 5 characters, and maximum 32" onChange={this.onInputChange} required/>
+                                   title="minimum 5 characters, and maximum 32" onChange={this.onInputChange}
+                                   required/>
                         </Col>
                     </FormGroup>
                     <FormGroup row={true} inline>
@@ -225,29 +265,36 @@ class AddUser extends Component {
                             <Label for="address">Address</Label>
                         </Col>
                         <Col sm={4}>
-                            {/*<Input id="address" type="text" size="sm" onChange={this.onInputChange} required/>*/}
-                            <SearchPlaces id="address" onChange={this.onInputChange} required/>
+                            <Input id="address" type="text" size="sm" onChange={this.onInputChange}
+                                   valid={this.state.validation.address}
+                                   invalid={this.state.validation.address === false} required/>
+                            <FormFeedback invalid style={{color: 'white', backgroundColor: '#dc3545'}}>
+                                Address must contain alphabet characters and may contain numbers!
+                            </FormFeedback>
                         </Col>
                     </FormGroup>
                     <FormGroup row={true}>
                         <Col sm={2}>
                             <Label for="DayOfBirth">Date of Birth</Label>
                         </Col>
-                        <Col sm={1}>
-                            <Input id="DayOfBirth" type="number" size="sm" min={1} max={31} placeholder="dd"
-                                   onChange={this.onInputChange} required/>
-                        </Col>
-                        <Col sm={1}>
-                            <Input id="MonthOfBirth" type="number" size="sm" min={1} max={12} placeholder="MM"
-                                   onChange={this.onInputChange}/>
-                        </Col>
-                        <Col sm={1}>
-                            <Input id="yearOfBirth" type="number" size="sm" min={1950} placeholder="yyyy"
-                                   onChange={this.onInputChange} required/>
+                        <Col sm={3}>
+                            <DatePicker id={"DayOfBirth"} selected={this.state.user.dateOfBirth}
+                                        onChange={this.birthDateChange} required/>
                         </Col>
 
                     </FormGroup>
-
+                    {
+                        this.state.user.userType === 'parent' &&
+                        <Col>
+                            <Button id="toggler_addStudent" style={{marginBottom: '1rem',backgroundColor: '#271670'}}>
+                                Add Students
+                            </Button>
+                            <UncontrolledCollapse toggler="#toggler_addStudent">
+                                <AddStudent addStudentToParent={this.addStudentToParent} parent={'parent available'}/>
+                            </UncontrolledCollapse>
+                            {this.state.user.studentAlerts}
+                        </Col>
+                    }
 
                     <FormGroup row={true}>
                         <Col sm={2}>
@@ -257,7 +304,8 @@ class AddUser extends Component {
 
                             <FormGroup check>
                                 <Label check>
-                                    <Input type="radio" name='userType' id="parent" defaultChecked
+                                    <Input type="radio" name='userType' id="parent"
+                                           defaultChecked={this.state.user.userType === "parent"}
                                            onChange={this.onRadioChecked}/>{' '}
                                     Parent
                                 </Label>
@@ -265,6 +313,7 @@ class AddUser extends Component {
                             <FormGroup check>
                                 <Label check>
                                     <Input type="radio" name='userType' id="supervisor"
+                                           defaultChecked={this.state.user.userType === "supervisor"}
                                            onChange={this.onRadioChecked}/>{' '}
                                     Supervisor
                                 </Label>
@@ -272,6 +321,7 @@ class AddUser extends Component {
                             <FormGroup check>
                                 <Label check>
                                     <Input type="radio" name='userType' id="driver"
+                                           defaultChecked={this.state.user.userType === "driver"}
                                            onChange={this.onRadioChecked}/>{' '}
                                     Driver
                                 </Label>
@@ -279,6 +329,7 @@ class AddUser extends Component {
                             <FormGroup check>
                                 <Label check>
                                     <Input type="radio" name='userType' id="admin"
+                                           defaultChecked={this.state.user.userType === "admin"}
                                            onChange={this.onRadioChecked}/>{' '}
                                     Admin
                                 </Label>
@@ -286,26 +337,19 @@ class AddUser extends Component {
                         </Col>
                     </FormGroup>
 
+
                     <FormGroup row={true}>
                         <Col sm={3}/>
                         <Col sm={4}>
                             <Button sm={4} color={'success'} disabled={!this.state.validation.submit}>Add User</Button>
                         </Col>
                     </FormGroup>
+                    {this.state.alert}
                 </Form>
-            </Container>
+            </div>
         );
     }
 }
 
-const mapStateToProps = (state) => {
-    return {}
-};
-const mapActionsToProps = (dispatch) => {
-    return {
-        addUser: (user) => {
-            dispatch({type: 'addUser', user})
-        }
-    }
-};
-export default connect(mapStateToProps, mapActionsToProps)(AddUser);
+
+export default (AddUser);

@@ -192,6 +192,7 @@ const mapStateToProps = (state) => {
     }
 };
 export default connect(mapStateToProps)(GoogleApiWrapper({
+/*    apiKey: 'AIzaSyBVYxIMHV0rlhKZMRbS8kE1bMyv9KFHugg',*/
     apiKey: 'AIzaSyB_eohRvcHqlhhPU7COoebF_gaKFSpXKcs',
     v: "3"
 })(MyMap));
