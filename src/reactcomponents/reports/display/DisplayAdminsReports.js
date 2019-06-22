@@ -14,7 +14,7 @@ class DisplayParentsReports extends Component {
             searchOption: 'id'
         };
         axios({
-            url: '/review_reports_admins',
+            url: '/review_notification_of_admin',
             method: 'get',
         }).then((res) => {
             if (res.data.reports) {
@@ -37,11 +37,8 @@ class DisplayParentsReports extends Component {
             newReports = this.state.reports.filter(report => report.id.toString().startsWith(value));
         else if (searchOption === "content")
             newReports = this.state.reports.filter(report => report.content.includes(value));
-        else if (searchOption === "answer")
-            newReports = this.state.reports.filter(report => report.answer?report.answer.includes(value):true);
-        else if (searchOption === "parentName")
-            newReports = this.state.reports.filter(report => report.parent.username.includes(value));
-
+        else if (searchOption === "to")
+            newReports = this.state.reports.filter(report => report.receiver_mail_or_id.includes(value));
         this.setState({
             searchReports: newReports
         });
@@ -61,9 +58,8 @@ class DisplayParentsReports extends Component {
                     <Col xs={{size: 3}}>
                         <Input type="select" name="select" id="searchOption" onChange={this.selectSearch}>
                             <option id={'id'} value={'id'}>ID</option>
-                            <option id={'parentName'} value={'parentName'}>Parent Name</option>
                             <option id={'content'} value={'content'}>Content</option>
-                            <option id={'answer'} value={'answer'}>Answer</option>
+                            <option id={'to'} value={'to'}>Sent To</option>
                         </Input>
                     </Col>
                     <Col xs={{size: 4}}>
@@ -75,9 +71,9 @@ class DisplayParentsReports extends Component {
         );
     }
 
-    addAnswerToTable = (answer , index) => {
+    addReportToTable = (report) => {
         let newReports = Object.assign([], this.state.reports);
-        newReports[index].answer=answer;
+        newReports.push(report);
         this.setState({
             reports: newReports,
             searchReports: newReports
@@ -88,39 +84,25 @@ class DisplayParentsReports extends Component {
     render() {
         return (
             <div>
-                <Col>
-                    <Button id="toggler_addparentReport" style={{marginBottom: '1rem',backgroundColor: '#271670'}}>
-                        Notify Parents
-                    </Button>
-                    <UncontrolledCollapse toggler="#toggler_addparentReport">
-                        <AddReport tabId={this.props.tabId}/>
-                    </UncontrolledCollapse>
-                </Col>
                 {this.getSearchMenu()}
 
                 <Table  bordered dark size={'sm'}  hover style={{marginTop: 20}}>
                     <thead style={{backgroundColor: '#190e49'}}>
                     <tr>
                         <th>#</th>
-                        <th>Parent Name</th>
                         <th>Content</th>
-                        <th>Reply</th>
+                        <th>Sent To</th>
                         <th>Date & Time</th>
                     </tr>
                     </thead>
                     <tbody style={{backgroundColor: '#3c3c7a'}}>
                     {
-                        this.state.searchReports.map((report, index) => {
+                        this.state.searchReports.map((report) => {
                             return (
                                 <tr key = {report.id}>
                                     <th scope="row">{report.id}</th>
-                                    <td>{report.parent.firstName} {report.parent.lastName}</td>
                                     <td>{report.content}</td>
-                                    <td>{
-                                        report.answer?report.answer:
-                                        <ReplyReport id={report.id} index={index} addAnswerToTable={this.addAnswerToTable}/>
-                                    }
-                                    </td>
+                                    <td>{report.receiver_mail_or_id}</td>
                                     <td>{report.dateTime}</td>
                                 </tr>
                             );

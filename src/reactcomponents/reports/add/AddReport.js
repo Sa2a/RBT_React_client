@@ -8,21 +8,22 @@ export default class AddReport extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            alert:null,
+            alert: null,
             notification: {
                 content: null,
-                user_type: this.props.tabId
+                user_type: this.props.tabId,
+                dateTime: null
             }
         };
     }
 
     onInputChange = (e) => {
         const {value} = e.target;
-        this.setState({alert:null});
+        this.setState({alert: null});
 
-        this.setState(state=>({
+        this.setState(state => ({
             ...state,
-            notification:{
+            notification: {
                 ...state.notification,
                 content: value
             }
@@ -30,17 +31,24 @@ export default class AddReport extends Component {
     };
     onSubmit = (e) => {
         e.preventDefault();
+        this.setState(state => ({
+                ...state,
+                notification: {
+                    ...state.notification,
+                    dateTime: new Date()
+                }
+            })
+        );
         axios({
             url: '/notification',
             method: 'post',
-            data:{
+            data: {
                 notification: this.state.notification
             }
         }).then((res) => {
-            if (res.data.report){
+            if (res.data.report) {
                 this.setState({alert: <Alert color={'success'}>the notification has been sent successfully</Alert>});
-            }
-            else
+            } else
                 this.setState({alert: <Alert color={'danger'}>error occurred!</Alert>});
 
         }).catch(error => {

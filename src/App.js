@@ -34,6 +34,7 @@ class App extends Component {
                     <Route exact path="/reports" component={() => <ReportsPage tabId="parent"/>}/>
                     <Route path="/reports/parents" component={() => <ReportsPage tabId="parent"/>}/>
                     <Route path="/reports/supervisors" component={() => <ReportsPage tabId="supervisor"/>}/>
+                    <Route path="/reports/admins" component={() => <ReportsPage tabId="admin"/>}/>
 
                     <Route path="/track" component={() => <TrackingPage tabId={'track'}/>}/>
                 </div>

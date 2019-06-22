@@ -115,6 +115,7 @@ class Header extends Component {
                                 <ButtonDropDown text={{name: "Reports", ref: "/reports"}} items={[
                                     {name: "Parents", ref: "/reports/parents"},
                                     {name: "Supervisors", ref: "/reports/supervisors"},
+                                    {name: "Admins", ref: "/reports/admins"},
                                 ]}/>
                             </NavItem>
                             {' '}

@@ -3,6 +3,7 @@ import {Container, Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap'
 import classnames from 'classnames';
 import DisplayParentsReports from "./display/DisplayParentsReports";
 import DisplaySupervisorsReports from "./display/DisplaySupervisorsReports";
+import DisplayAdminsReports from "./display/DisplayAdminsReports";
 
 class UsersPage extends Component {
     constructor(props) {
@@ -48,6 +49,16 @@ class UsersPage extends Component {
                             Supervisors Reports
                         </NavLink>
                     </NavItem>
+                    <NavItem>
+                        <NavLink style={{color:'white', backgroundColor:  this.state.activeTab === 'admin'?"#5858c1":'#007bff'}}
+                                 className={classnames({active: this.state.activeTab === 'admin'})}
+                                 onClick={() => {
+                                     this.toggle('admin');
+                                 }}
+                        >
+                            Admin
+                        </NavLink>
+                    </NavItem>
                 </Nav>
                 <TabContent activeTab={this.state.activeTab} style={{backgroundColor: "#5858c1", paddingTop: 20}}>
 
@@ -56,6 +67,9 @@ class UsersPage extends Component {
                     </TabPane>
                     <TabPane tabId="supervisor">
                         <DisplaySupervisorsReports tabId="supervisor"/>
+                    </TabPane>
+                    <TabPane tabId="admin">
+                        <DisplayAdminsReports tabId="admin"/>
                     </TabPane>
 
                 </TabContent>
