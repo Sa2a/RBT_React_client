@@ -1,3 +1,12 @@
+install npm if its not installed
+dounload the project.
+open project folder.
+run command `npm i`
+run command `npm start`
+enjoy.
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
