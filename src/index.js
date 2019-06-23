@@ -8,7 +8,6 @@ import 'react-widgets/dist/css/react-widgets.css';
 import * as serviceWorker from './javascript/serviceWorker';
 
 import "react-datepicker/dist/react-datepicker.css";
-import 'react-splitter-layout/lib/index.css';
 import App from "./App";
 
 

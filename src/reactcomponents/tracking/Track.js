@@ -29,6 +29,35 @@ class Track
 
     }
 
+    distance(latlng1, latlng2, unit) {
+        let lat1 = latlng1.lat;
+        let lon1 = latlng1.lng;
+        let lat2 = latlng2.lat;
+        let lon2 = latlng2.lat;
+        if ((lat1 == lat2) && (lon1 == lon2)) {
+            return 0;
+        } else {
+            let radlat1 = Math.PI * lat1 / 180;
+            let radlat2 = Math.PI * lat2 / 180;
+            let theta = lon1 - lon2;
+            let radtheta = Math.PI * theta / 180;
+            let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+            if (dist > 1) {
+                dist = 1;
+            }
+            dist = Math.acos(dist);
+            dist = dist * 180 / Math.PI;
+            dist = dist * 60 * 1.1515;
+            if (unit === "K") {
+                dist = dist * 1.609344
+            }
+            if (unit === "N") {
+                dist = dist * 0.8684
+            }
+            return dist;
+        }
+    }
+
     startTracking = () => {
         const {google, map} = this.state;
         const socket = socketIOClient('http://localhost:5001');
@@ -61,8 +90,7 @@ class Track
 
                 if (routes[i].trackMarker) {
                     routes[i].trackMarker.setPosition(to);
-                }
-                else{
+                } else {
                     let marker = new google.maps.Marker({
                         map: map,
                         position: to,
@@ -242,7 +270,7 @@ class Track
                            placeholder="Search Box"/>
 
                     <Map google={this.props.google}
-                         style={{height: '90%', width: '82%', position: 'static'}}
+                         style={{height: '90%', width: '82%'}}
                          className={'map'}
                          zoom={8}
                          onClick={this.mapClicked}
@@ -261,9 +289,7 @@ export default GoogleApiWrapper({
         apiKey: 'AIzaSyB_eohRvcHqlhhPU7COoebF_gaKFSpXKcs',
     */
     v: "3"
-})
-
-(
+})(
     Track
 )
 ;

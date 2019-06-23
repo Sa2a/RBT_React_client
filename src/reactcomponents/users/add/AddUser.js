@@ -11,7 +11,6 @@ import {
     Label,
     UncontrolledCollapse
 } from 'reactstrap';
-import {connect} from "react-redux";
 import axios from "axios";
 import DatePicker from "react-datepicker/es";
 import AddStudent from "./AddStudent";
