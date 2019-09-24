@@ -1,9 +1,10 @@
-install npm if its not installed<br>
-dounload the project.<br>
-open project folder.<br>
-run command `npm i`<br>
-run command `npm start`<br>
-enjoy.<br>
+##To build and run this website.
+1-install npm if its not installed<br>
+2-dounload the project.<br>
+3-open project folder.<br>
+4-run command `npm i`<br>
+5-run command `npm start`<br>
+6-enjoy.<br>
 <br><br>
 
 
