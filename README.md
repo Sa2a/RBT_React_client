@@ -6,6 +6,21 @@
 5-run command `npm start`<br>
 6-enjoy.<br>
 <br><br>
+## Some pictures of the website:
+![WhatsApp Image 2019-06-24 at 8 08 20 PM](https://user-images.githubusercontent.com/34524576/65523097-0b9d0a00-deec-11e9-9caa-a0c7c88c8ee7.jpeg)<br><br>
+
+![WhatsApp Image 2019-06-24 at 8 08 20 PM(1)](https://user-images.githubusercontent.com/34524576/65523133-1bb4e980-deec-11e9-89bc-9cd1ff88eeee.jpeg)<br><br>
+![WhatsApp Image 2019-06-24 at 8 08 20 PM(3)](https://user-images.githubusercontent.com/34524576/65523185-31c2aa00-deec-11e9-8657-da24e2098d3c.jpeg)<br><br>
+![WhatsApp Image 2019-06-24 at 8 08 20 PM(8)](https://user-images.githubusercontent.com/34524576/65523299-5cacfe00-deec-11e9-9154-f4063aa65dc5.jpeg)<br><br>
+![WhatsApp Image 2019-06-24 at 8 08 19 PM(1)](https://user-images.githubusercontent.com/34524576/65523316-646ca280-deec-11e9-8a14-ca1eb1a03412.jpeg)<br><br>
+![WhatsApp Image 2019-06-24 at 8 23 39 PM](https://user-images.githubusercontent.com/34524576/65523329-69315680-deec-11e9-95c4-05b7298b9b68.jpeg)<br><br>
+![WhatsApp Image 2019-06-24 at 8 23 39 PM(1)](https://user-images.githubusercontent.com/34524576/65523335-6df60a80-deec-11e9-8fea-11ec46a50f0e.jpeg)<br><br>
+![WhatsApp Image 2019-06-24 at 8 08 20 PM(7)](https://user-images.githubusercontent.com/34524576/65523370-7c442680-deec-11e9-9309-0ff2d3a2d5a5.jpeg)<br><br>
+![WhatsApp Image 2019-06-24 at 8 08 20 PM(11)](https://user-images.githubusercontent.com/34524576/65523396-81a17100-deec-11e9-930f-25f46eba2b36.jpeg)<br><br>
+
+
+
+
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
